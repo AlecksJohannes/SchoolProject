@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".Activities.AddQuestionActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tbMakeTest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/background_light"
+        app:title="Test"
+        app:titleTextColor="@android:color/holo_blue_dark">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Multiple choice"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="20dp" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tbMakeTest">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardViewChoice1"
+                android:layout_width="match_parent"
+                android:foreground="@drawable/ripple_effect_correct"
+
+                android:onClick="cvChoice1OnSelect"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:elevation="10dp"
+                app:cardCornerRadius="5dp"
+                app:contentPadding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="fill">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:singleLine="false"
+                        android:text="Let's play" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <!--<android.support.v7.widget.CardView-->
+                <!--android:id="@+id/cardViewChoice2"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="cvChoice2OnSelect"-->
+                <!--android:foreground="@drawable/ripple_effect_correct"-->
+                <!--android:layout_below="@+id/cardViewChoice1"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:clickable="true"-->
+                <!--app:cardCornerRadius="5dp"-->
+                <!--app:contentPadding="10dp">-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="fill">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="@android:color/transparent"-->
+                        <!--android:gravity="center"-->
+                        <!--android:singleLine="false"-->
+                        <!--android:text="Add Question" />-->
+                <!--</LinearLayout>-->
+            <!--</android.support.v7.widget.CardView>-->
+
+            <!--<android.support.v7.widget.CardView-->
+                <!--android:id="@+id/cardViewChoice3"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:foreground="@drawable/ripple_effect_correct"-->
+                <!--android:layout_below="@+id/cardViewChoice2"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:clickable="true"-->
+                <!--app:cardCornerRadius="5dp"-->
+                <!--app:contentPadding="10dp">-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="fill">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="@android:color/transparent"-->
+                        <!--android:gravity="center"-->
+                        <!--android:singleLine="false"-->
+                        <!--android:text="Choice 3" />-->
+                <!--</LinearLayout>-->
+            <!--</android.support.v7.widget.CardView>-->
+
+            <!--<android.support.v7.widget.CardView-->
+                <!--android:id="@+id/cardViewChoice4"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:foreground="@drawable/ripple_effect_correct"-->
+                <!--android:layout_below="@+id/cardViewChoice3"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:clickable="true"-->
+                <!--app:cardCornerRadius="5dp"-->
+                <!--app:contentPadding="10dp">-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="fill">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="@android:color/transparent"-->
+                        <!--android:gravity="center"-->
+                        <!--android:singleLine="false"-->
+                        <!--android:text="Choice 4" />-->
+                <!--</LinearLayout>-->
+            <!--</android.support.v7.widget.CardView>-->
+
+            <!--<android.support.v7.widget.CardView-->
+                <!--android:id="@+id/cardViewChoice5"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/cardViewChoice4"-->
+                <!--android:foreground="@drawable/ripple_effect_correct"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:clickable="true"-->
+                <!--app:cardCornerRadius="5dp"-->
+                <!--app:contentPadding="10dp">-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="fill">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="@android:color/transparent"-->
+                        <!--android:gravity="center"-->
+                        <!--android:singleLine="false"-->
+                        <!--android:text="Choice 5" />-->
+                <!--</LinearLayout>-->
+            <!--</android.support.v7.widget.CardView>-->
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>
