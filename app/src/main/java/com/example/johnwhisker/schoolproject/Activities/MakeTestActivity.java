@@ -1,13 +1,5 @@
 package com.example.johnwhisker.schoolproject.Activities;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.text.TextPaint;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.graphics.*;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -21,10 +13,9 @@ import android.support.v7.widget.CardView;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.johnwhisker.schoolproject.Question;
 import com.example.johnwhisker.schoolproject.R;
@@ -41,8 +32,11 @@ public class MakeTestActivity extends AppCompatActivity {
     public static final int totalQuestion = 30;
     int current, score;
     Question question;
+    CircularCountdown circularCountdown;
+    LinearLayout parent;
     List<Question> questionList, askedQuestionList;
     Random random;
+    Boolean reset;
     @Bind(R.id.tvProgress)
     TextView tvProgress;
     @Bind(R.id.cardViewAnswer3)
@@ -70,9 +64,9 @@ public class MakeTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_test);
         ButterKnife.bind(this);
-        LinearLayout parent = (LinearLayout) findViewById(R.id.viewx);
-        parent.addView(new CircularCountdown(this));
+        parent = (LinearLayout) findViewById(R.id.viewx);
         current = 0;
+        reset = false;
         score = 0;
         questionList = new ArrayList<>();
         random = new Random();
@@ -85,7 +79,9 @@ public class MakeTestActivity extends AppCompatActivity {
     }
 
     public void setQuestion() {
-        //Init list
+        reset = true;
+        circularCountdown = new CircularCountdown(this);
+        parent.addView(circularCountdown);
         if (current == totalQuestion) {
             Intent i = new Intent(this, ShowResult.class);
             i.putExtra("A", score);
@@ -109,7 +105,7 @@ public class MakeTestActivity extends AppCompatActivity {
 
             // set View
             Log.d("Debug", question.toString());
-            tvProgress.setText((current + 1) + "/30"+"  QUESTIONS");
+            tvProgress.setText((current + 1) + "/30" + "  QUESTIONS");
             tvQuestion.setText(question.getQuestion());
             tvAnswer1.setText(question.getA());
             tvAnswer2.setText(question.getB());
@@ -262,136 +258,129 @@ public class MakeTestActivity extends AppCompatActivity {
             }
         }, 1000);
     }
-        private class CircularCountdown extends View {
 
-            private final Paint backgroundPaint;
-            private final Paint progressPaint;
-            private final Paint textPaint;
+    private class CircularCountdown extends View {
 
-            private long startTime;
-            private long currentTime;
-            private long maxTime;
+        private final Paint backgroundPaint;
+        private final Paint progressPaint;
+        private final Paint textPaint;
+        private final Handler viewHandler;
+        private final Runnable updateView;
+        private long startTime;
+        private long currentTime;
+        private long maxTime;
+        private long progressMillisecond;
+        private double progress;
+        private RectF circleBounds;
+        private float radius;
+        private float handleRadius;
+        private float textHeight;
+        private float textOffset;
 
-            private long progressMillisecond;
-            private double progress;
+        public CircularCountdown(Context context) {
+            super(context);
 
-            private RectF circleBounds;
-            private float radius;
-            private float handleRadius;
-            private float textHeight;
-            private float textOffset;
+            // used to fit the circle into
+            circleBounds = new RectF();
 
-            private final Handler viewHandler;
-            private final Runnable updateView;
+            // size of circle and handle
+            radius = 130;
+            handleRadius = 10;
 
-            public CircularCountdown(Context context) {
-                super(context);
+            // limit the counter to go up to maxTime ms
+            maxTime = 50000;
 
-                // used to fit the circle into
-                circleBounds = new RectF();
-
-                // size of circle and handle
-                radius = 130;
-                handleRadius = 10;
-
-                // limit the counter to go up to maxTime ms
-                maxTime = 50000;
-
-                // start and current time
-                startTime = System.currentTimeMillis();
-                currentTime = startTime;
+            // start and current time
+            startTime = System.currentTimeMillis();
+            currentTime = startTime;
 
 
-                // the style of the background
-                backgroundPaint = new Paint();
-                backgroundPaint.setStyle(Paint.Style.STROKE);
-                backgroundPaint.setAntiAlias(true);
-                backgroundPaint.setStrokeWidth(10);
-                backgroundPaint.setStrokeCap(Paint.Cap.SQUARE);
-                backgroundPaint.setColor(Color.parseColor("#4D4D4D"));  // dark gray
+            // the style of the background
+            backgroundPaint = new Paint();
+            backgroundPaint.setStyle(Paint.Style.STROKE);
+            backgroundPaint.setAntiAlias(true);
+            backgroundPaint.setStrokeWidth(10);
+            backgroundPaint.setStrokeCap(Paint.Cap.SQUARE);
+            backgroundPaint.setColor(Color.parseColor("#4D4D4D"));  // dark gray
 
-                // the style of the 'progress'
-                progressPaint = new Paint();
-                progressPaint.setStyle(Paint.Style.STROKE);
-                progressPaint.setAntiAlias(true);
-                progressPaint.setStrokeWidth(10);
-                progressPaint.setStrokeCap(Paint.Cap.SQUARE);
-                progressPaint.setColor(Color.parseColor("#00A9FF"));    // light blue
+            // the style of the 'progress'
+            progressPaint = new Paint();
+            progressPaint.setStyle(Paint.Style.STROKE);
+            progressPaint.setAntiAlias(true);
+            progressPaint.setStrokeWidth(10);
+            progressPaint.setStrokeCap(Paint.Cap.SQUARE);
+            progressPaint.setColor(Color.parseColor("#00A9FF"));    // light blue
 
-                // the style for the text in the middle
-                textPaint = new TextPaint();
-                textPaint.setTextSize(radius / 2);
-                textPaint.setColor(Color.BLACK);
-                textPaint.setTextAlign(Paint.Align.CENTER);
+            // the style for the text in the middle
+            textPaint = new TextPaint();
+            textPaint.setTextSize(radius / 2);
+            textPaint.setColor(Color.BLACK);
+            textPaint.setTextAlign(Paint.Align.CENTER);
 
-                // text attributes
-                textHeight = textPaint.descent() - textPaint.ascent();
-                textOffset = (textHeight / 2) - textPaint.descent();
+            // text attributes
+            textHeight = textPaint.descent() - textPaint.ascent();
+            textOffset = (textHeight / 2) - textPaint.descent();
 
 
-                // This will ensure the animation will run periodically
-                viewHandler = new Handler();
-                updateView = new Runnable(){
-                    @Override
-                    public void run(){
-                        // update current time
-                        currentTime = System.currentTimeMillis();
-
-                        // get elapsed time in milliseconds and clamp between <0, maxTime>
-                        progressMillisecond = maxTime -(currentTime - startTime) % maxTime;
-
-                        // get current progress on a range <0, 1>
-                        progress = (double) progressMillisecond / maxTime;
-
-                        CircularCountdown.this.invalidate();
-                        viewHandler.postDelayed(updateView, 1000/60);
+            // This will ensure the animation will run periodically
+            viewHandler = new Handler();
+            updateView = new Runnable() {
+                @Override
+                public void run() {
+                    // update current time
+                    if (reset == true) {
+                        startTime = System.currentTimeMillis();
+                        Toast.makeText(getApplication(), "Reset", Toast.LENGTH_SHORT).show();
+                        reset = false;
                     }
-                };
-                viewHandler.post(updateView);
-            }
-
-
-
-            @Override
-            protected void onDraw(Canvas canvas) {
-                super.onDraw(canvas);
-
-                // get the center of the view
-                float centerWidth = canvas.getWidth()-750 / 2;
-                float centerHeight = canvas.getHeight()-1750 / 2;
-
-
-                // set bound of our circle in the middle of the view
-                circleBounds.set(centerWidth - radius ,
-                        centerHeight - radius,
-                        centerWidth + radius,
-                        centerHeight + radius);
-
-
-                // draw background circle
-                canvas.drawCircle(centerWidth, centerHeight, radius, backgroundPaint);
-
-                // we want to start at -90°, 0° is pointing to the right
-                canvas.drawArc(circleBounds, -90, (float)(progress*360), false, progressPaint);
-
-                // display text inside the circle
-                canvas.drawText((double)(progressMillisecond/100)/10 + "s",
-                        centerWidth,
-                        centerHeight + textOffset,
-                        textPaint);
-                if((double)(progressMillisecond/100)/10 ==0 )
-                {
-                    Intent i = new Intent(MakeTestActivity.this, ShowResult.class);
-                    i.putExtra("A", score);
-                    startActivity(i);
+                    currentTime = System.currentTimeMillis();
+                    // get elapsed time in milliseconds and clamp between <0, maxTime>
+                    progressMillisecond = maxTime - (currentTime - startTime) % maxTime;
+                    // get current progress on a range <0, 1>
+                    progress = (double) progressMillisecond / maxTime;
+                    CircularCountdown.this.invalidate();
+                    viewHandler.postDelayed(updateView, 1000 / 60);
                 }
-                // draw handle or the circle
-                canvas.drawCircle((float)(centerWidth  + (Math.sin(progress * 2 * Math.PI) * radius)),
-                        (float)(centerHeight - (Math.cos(progress * 2 * Math.PI) * radius)),
-                        handleRadius,
-                        progressPaint);
-            }
+            };
+            viewHandler.post(updateView);
+        }
 
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+            // get the center of the view
+            float centerWidth = canvas.getWidth() / 2;
+            float centerHeight = (canvas.getHeight() / 2) - 500f;
+            // set bound of our circle in the middle of the view
+            circleBounds.set(centerWidth - radius,
+                    centerHeight - radius,
+                    centerWidth + radius,
+                    centerHeight + radius);
+
+
+            // draw background circle
+            canvas.drawCircle(centerWidth, centerHeight, radius, backgroundPaint);
+
+            // we want to start at -90°, 0° is pointing to the right
+            canvas.drawArc(circleBounds, -90, (float) (progress * 360), false, progressPaint);
+
+            // display text inside the circle
+            canvas.drawText((double) (progressMillisecond / 100) / 10 + "s",
+                    centerWidth,
+                    centerHeight + textOffset,
+                    textPaint);
+            if ((double) (progressMillisecond / 100) / 10 == 0) {
+                setQuestion();
+
+            }
+            // draw handle or the circle
+            canvas.drawCircle((float) (centerWidth + (Math.sin(progress * 2 * Math.PI) * radius)),
+                    (float) (centerHeight - (Math.cos(progress * 2 * Math.PI) * radius)),
+                    handleRadius,
+                    progressPaint);
         }
 
     }
+
+}
