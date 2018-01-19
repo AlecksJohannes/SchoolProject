@@ -32,14 +32,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
     Firebase dtb;
     List<Question> questionList;
-    @Bind(R.id.cardViewChoice1)
+    @BindView(R.id.cardViewChoice1)
     CardView cv1;
 
     @Override
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
         dtb = new Firebase(Config.FIREBASE_URL);
         questionList = new ArrayList<>();
-        cv1.setClickable(false);
+        //cv1.setClickable(false);
         //isOnline();
         SendNetWorkRequest();
     }
@@ -87,11 +87,13 @@ public class MainActivity extends AppCompatActivity {
         testOnline.get(url, params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                System
+                /*
                 Toast.makeText(MainActivity.this,"Could not Connect to the FireBase",Toast.LENGTH_SHORT).show();
                 Toast.makeText(MainActivity.this,"Switching to OfflineMode",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, OfflineMode.class);
                 startActivity(intent);
-
+                */
             }
 
             @Override

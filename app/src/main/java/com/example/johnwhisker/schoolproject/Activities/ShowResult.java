@@ -11,20 +11,18 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.johnwhisker.schoolproject.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class ShowResult extends AppCompatActivity {
-    @Bind(R.id.ivInsideCircle)
+    @BindView(R.id.ivInsideCircle)
     ImageView ivInsideCircle;
-    //    @Bind(R.id.ivOutsideCircle)
-//    ImageView ivOutsideCircle;
-    @Bind(R.id.tvPercent)
+    @BindView(R.id.tvPercent)
     TextView tvPercent;
-    @Bind(R.id.tvCorrect)
+    @BindView(R.id.tvCorrect)
     TextView tvCorrect;
-    @Bind(R.id.tvLevel)
+    @BindView(R.id.tvLevel)
     TextView tvLevel;
     int valueDraw, valueIntent;
     int correct;

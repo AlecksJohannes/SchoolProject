@@ -35,31 +35,31 @@ import com.firebase.client.ValueEventListener;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class OfflineMode extends AppCompatActivity {
     private List<Question> quesList;
     private int score=0;
-    @Bind(R.id.tvProgress)
+    @BindView(R.id.tvProgress)
     TextView tvProgress;
-    @Bind(R.id.cardViewAnswer3)
+    @BindView(R.id.cardViewAnswer3)
     CardView cv3;
-    @Bind(R.id.cardViewAnswer4)
+    @BindView(R.id.cardViewAnswer4)
     CardView cv4;
-    @Bind(R.id.cardViewAnswer1)
+    @BindView(R.id.cardViewAnswer1)
     CardView cv1;
-    @Bind(R.id.cardViewAnswer2)
+    @BindView(R.id.cardViewAnswer2)
     CardView cv2;
-    @Bind(R.id.tvQuestion)
+    @BindView(R.id.tvQuestion)
     TextView tvQuestion;
-    @Bind(R.id.tvAnswer1)
+    @BindView(R.id.tvAnswer1)
     TextView tvAnswer1;
-    @Bind(R.id.tvAnswer2)
+    @BindView(R.id.tvAnswer2)
     TextView tvAnswer2;
-    @Bind(R.id.tvAnswer3)
+    @BindView(R.id.tvAnswer3)
     TextView tvAnswer3;
-    @Bind(R.id.tvAnswer4)
+    @BindView(R.id.tvAnswer4)
     TextView tvAnswer4;
     Question currentQ = new Question();
     int x = currentQ.getID();
